@@ -32,3 +32,20 @@ li {
   border-bottom: solid 1px #DDD;
   cursor: pointer;
 }
+
+/**
+ * Brandrews
+ */
+
+.brandrews {
+  float: right;
+  margin-top: 30px;
+  margin-right: 20px;
+  line-height: 20px;
+  font-size: 90%;
+  color: #999;
+}
+a {
+  text-decoration: none;
+  color: #999;
+}
