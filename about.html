@@ -176,7 +176,7 @@ Download the <a href="https://raw.githubusercontent.com/matthew-andrews/offline-
 <p>We've made the following enhancements:-</p>
 
 <ul>
-  <li>Added a new event handler (onClick) that listens to click events, checks to see if the <strong>target element</strong> has an <strong>id</strong> attribute, if it does convert that back into an integer with <strong>parseInt</strong>, calls <strong>databaseTodosDelete</strong> with that value, and - if the todo is successfully deleted - it will re-render the todo list using the same approach we took in <strong>Step 6</strong>.</li>
+  <li>Added a new event handler (<strong>onClick</strong>) that listens to click events, checks to see if the <strong>target element</strong> has an <strong>id</strong> attribute, if it does convert that back into an integer with <strong>parseInt</strong>, calls <strong>databaseTodosDelete</strong> with that value, and - if the todo is successfully deleted - it will re-render the todo list using the same approach we took in <strong>Step 6</strong>.</li>
   <li>Enhanced the <strong>todoToHtml</strong> function so that every <strong>todo</strong> is output with an <strong>id</strong> attribute, set to its <strong>timeStamp</strong>.</li>
   <li>Added a new function, <strong>databaseTodosDelete</strong>, which take that <strong>timeStamp</strong> and a <strong>callback</strong>, deletes the <strong>todo</strong> then runs the <strong>callback.</strong></li>
 </ul>
