@@ -17,13 +17,13 @@
   <li><strong>WebSQL</strong> - the now deprecated predecessor to WebSQL, and <a href="http://caniuse.com/sql-storage">the only option available on current versions of iOS</a> (although iOS8 will finally give us IndexedDB)</li>
 </ul>
 
-<p>(Veterans in the offline-first world will now probably be thinking: but we could just use <a href="http://caniuse.com/namevalue-storage">localStorage</a>, which has the benefits of a <strong>much simpler API</strong> and we won't need to worry about the complexity of using both IndexedDB and WebSQL.  Whilst that is technically true, there are a <a href="https://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">number of problems with localStorage</a> - most importantly the amount of storage space available for localStorage is significantly less than IndexedDB/WebSQL).</p>
+<p>I've described all the steps using <strong>Google Chrome</strong> (and its developer tools) because currently it's the most popular browser among developers - but there's no reason why you couldn't develop this application with any other modern browser.</p>
+
+<p>(Veterans in the offline-first world will now probably be thinking: but we could just use <a href="http://caniuse.com/namevalue-storage">localStorage</a>, which has the benefits of a <strong>much simpler API</strong> and we won't need to worry about the complexity of using both IndexedDB and WebSQL.  Whilst that is technically true, there are a <a href="https://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">number of problems with localStorage</a> - most importantly the amount of storage space available for localStorage is significantly less then IndexedDB/WebSQL and I think our users are going to want to add <strong>a lot</strong> of todos)</p>
 
 <p>Luckily, although we're going to need <strong>to use both</strong> we only need to think about <strong>IndexedDB</strong>.  To be able to support WebSQL we're going to use an <a href="https://github.com/axemclion/IndexedDBShim">IndexedDB polyfill</a>.  This will keep our code clean and easy to maintain and, in the future, when all the browsers we care about are able to support IndexedDB natively, we can simply delete the polyfill.</p>
 
 <p><strong>If you're starting a new project and are currently deciding whether to use IndexedDB or WebSQL, I strongly advocate using IndexedDB and the polyfill.  In my opinion, there is no reason to write any new code that integrates with WebSQL directly.</strong></p>
-
-<p>I've described all the steps using <strong>Google Chrome</strong> (and its developer tools) because currently it's the most popular browser among developers - but there's no reason why you couldn't develop this application with any other modern browser.</p>
 
 <h2>Step 1 - Scaffolding the application and opening a database</h2>
 
