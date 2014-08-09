@@ -67,8 +67,6 @@ Download the <a href="https://raw.githubusercontent.com/matthew-andrews/offline-
 
 <p>Like many database formats that you might be familiar with, within a single IndexedDB database you can create many 'tables'.  Those tables are called <strong>objectStores</strong>.  In this step we're going to create an object store called <strong>todo</strong>, to do this we simply add an event listener on the database's <strong>upgradeneeded</strong> event.</p>
 
-<p>IndexedDB is a bit different to many database formats that exist because it does not force you to store your data in a strict format.  Although you must choose at least one <strong>key</strong> the data that is indexed against.</p>
-
 <p>For our offline todo app we're going to the data format as simple as possible and store javascript objects with two properties:-</p>
 
 <ul>
