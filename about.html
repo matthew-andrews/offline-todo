@@ -1,12 +1,8 @@
 <h1>Building a simple cross browser offline todo list with IndexedDB (and WebSQL)</h1>
 
-<h2>What's going on here?</h2>
-
-<p>Hi I'm <a href="https://twitter.com/andrewsmatt">Matt</a>, I work for FT Labs <a href="http://labs.ft.com/jobs">(and you should too)</a>.  I'm running a workshop on <a href="http://smashingconf.com/freiburg-2014/workshops/matthew-andrews">building offline web applications in Freiburg, Germany on 17th September 2014</a> - and for the dual purposes of promoting <a href="http://offlinefirst.org/">offline-first</a> web applications and shamelessly trying to encourage ticket sales I thought I'd share part of one of the exercises that I'll be guiding people through during those workshops.  This tutorial <a href="http://www.html5rocks.com/en/tutorials/indexeddb/todo/">builds on top of the article</a> by <a href="https://twitter.com/Paul_Kinlan">Paul Kinlan</a> so much credit due to him*.</p>
-
 <h2>Introduction</h2>
 
-<p>We're going to make a simple <a href="https://matthew-andrews.github.io/offline-todo/">todo application</a> with HTML5 technologies that <strong>stores its data offline</strong>.  You will be able to <strong>add</strong> and <strong>delete</strong> todos, and it should work on the <strong>1st</strong> and <strong>2nd</strong> most recent versions of all major desktop and mobile browsers.  The complete project is <a href="https://github.com/matthew-andrews/offline-todo">ready for forking on GitHub</a>.</p>
+<p>We're going to make a simple <strong>offline first</strong> <a href="https://matthew-andrews.github.io/offline-todo/">todo application</a> with HTML5 technologies.  It will <strong>store its data offline</strong> and load without an internet connection.  You will be able to <strong>add</strong> and <strong>delete</strong> todos, and it should work on the <strong>1st</strong> and <strong>2nd</strong> most recent versions of all major desktop and mobile browsers.  The complete project is <a href="https://github.com/matthew-andrews/offline-todo">ready for forking on GitHub</a>.  This <a href="http://www.html5rocks.com/en/tutorials/indexeddb/todo/">builds on top of the article</a> by <a href="https://twitter.com/Paul_Kinlan">Paul Kinlan</a> so much credit due to him*.</p>
 
 <h2>What technologies to use</h2>
 
@@ -17,7 +13,7 @@
   <li><strong>WebSQL</strong> - the now deprecated predecessor to WebSQL, and <a href="http://caniuse.com/sql-storage">the only option available on current versions of iOS</a> (although iOS8 will finally give us IndexedDB)</li>
 </ul>
 
-<p>(Veterans in the offline-first world will now probably be thinking: but we could just use <a href="http://caniuse.com/namevalue-storage">localStorage</a>, which has the benefits of a <strong>much simpler API</strong> and we won't need to worry about the complexity of using both IndexedDB and WebSQL.  Whilst that is technically true, there are a <a href="https://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">number of problems with localStorage</a> - most importantly the amount of storage space available for localStorage is significantly less than IndexedDB/WebSQL).</p>
+<p>(Veterans in the offline-first world may now be thinking: but we could just use <a href="http://caniuse.com/namevalue-storage">localStorage</a>, which has the benefits of a <strong>much simpler API</strong> and we won't need to worry about the complexity of using both IndexedDB and WebSQL.  Whilst that is technically true, there are a <a href="https://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">number of problems with localStorage</a> - most importantly the amount of storage space available for localStorage is significantly less than IndexedDB/WebSQL).</p>
 
 <p>Luckily, although we're going to need <strong>to use both</strong> we only need to think about <strong>IndexedDB</strong>.  To be able to support WebSQL we're going to use an <a href="https://github.com/axemclion/IndexedDBShim">IndexedDB polyfill</a>.  This will keep our code clean and easy to maintain and, in the future, when all the browsers we care about are able to support IndexedDB natively, we can simply delete the polyfill.</p>
 
@@ -39,7 +35,7 @@
 
 <script src="https://gist.github.com/matthew-andrews/85c34d98443c1e041e5b.js"></script>
 
-<p>There should be nothing surprising here - it's a standard HTML5 web page, with an input field to add your items to do and empty unordered list that will be filled with those items.</p>
+<p>There should be nothing surprising here - it's a standard HTML5 web page, with an input field to add your <strong>todo items</strong> and an empty unordered list that will be filled with those items.</p>
 
 <h3>/indexeddb.shim.min.js</h3>
 
@@ -84,13 +80,13 @@ Download the <a href="https://raw.githubusercontent.com/matthew-andrews/offline-
 
 <p>This will create an object store keyed by <strong>timeStamp</strong> called <strong>todo</strong>.</p>
 
-<p>Having updated <strong>application.js</strong>, if you open the web app again you'll notice that not a lot happens (try adding a <strong>console.log</strong> in the <strong>onupgradeneeded</strong> callback to be sure). The problem is we haven't increased the version number so the browser <em>doesn't know it needs to run the upgrade callback</em>.</p>
+<p>Having updated <strong>application.js</strong>, if you open the web app again not a lot happens - the code within <strong>onupgradeneeded</strong> never runs (try adding a <strong>console.log</strong> in the <strong>onupgradeneeded</strong> callback to be sure). The problem is we haven't increased the version number so the browser <em>doesn't know it needs to run the upgrade callback</em>.</p>
 
 <h3>How to solve this</h3>
 
 <p>Whenever you need to add or remove object stores you will need to <strong>increment the version number</strong> - otherwise the structure of the data will be different to what your code expects and you risk breaking your application in ways that can be very difficult to fix.</p>
 
-<p>There is another way to fix this that we can use because this application doesn't have any real users yet - and that is to delete the database.  Copy this line of code into the <strong>Console</strong> (last tab in Developer Tools), press enter and then refresh the page:-</p>
+<p>There is another way to fix this that we can use because this application doesn't have any real users yet - and that is to delete the database.  Copy this line of code into the <strong>Console</strong> and then refresh the page:-</p>
 
 <pre>indexedDB.deleteDatabase('todos');</pre>
 
@@ -185,9 +181,38 @@ Download the <a href="https://raw.githubusercontent.com/matthew-andrews/offline-
 
 <h2>But have we actually built an offline-first todo list app?</h2>
 
-<p>Almost, but not quite.  Although we can now store all the todo data offline, if you switch your device's internet connection off and try loading the application, it won't open.  To fix this we need to use either the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Using_the_application_cache">Application Cache</a> or <a href="http://serviceworker.org">ServiceWorker</a>.</p>
+<p>Almost, but not quite.  Although we can now store all the todo data offline, if you switch your device's internet connection off and try loading the application, it won't open.  To fix this we need to use the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Using_the_application_cache">HTML5 Application Cache</a>.
 
-<p>Also, by storing all the data on the user's device we're not really taking full advantage of the full power of the web.  Wouldn't it be better if the application could synchronise with a server so that you could manage your todos on any of your devices, whether the device was online or not?</p>
+<p><strong>Warning:</strong> users of the HTML5 Application Cache should be aware of the following:-</p>
+
+<ul>
+  <li>Whilst it works reasonable well for a simple, single-page application like this, that is often not the case.  I highly recommend <a href="http://alistapart.com/article/application-cache-is-a-douchebag">thoroughly researching how it works</a> before applying it to your website.</li>
+  <li>It may soon be replaced by <a href='http://www.serviceworker.org/'>Service Worker</a> (currently not available in any browser)</li>
+</ul>
+
+<h2>Step 8 - Truly offline</h2>
+
+<p>To enable the application cache you must include add a <strong>manifest</strong> attribute to the <strong>&lt;html&gt;</strong> element of your web page, like this:-</p>
+
+<h3>/index.html</h3>
+
+<script src="https://gist.github.com/matthew-andrews/2674f58ccbb2cce4ef17.js"></script>
+
+<p>Then, you must create a <strong>manifest file</strong>, which is a simple text file that allow you to crudely specify the files you want to make available offline - and how you want that cache to behave.</p>
+
+<script src="https://gist.github.com/matthew-andrews/134959a7bd5b05ef9595.js"></script>
+
+<p>The section that begins <strong>CACHE MANFIEST</strong> will tell the browser:-
+<ul>
+  <li>when the application is first accessed, download each of those files and store them in the application cache,</li>
+  <li>and then any time any of those files is needed from then on load the cached versions of those files - rather than trying to download those files from the internet again.</li>
+</ul>
+
+<p>The section that begins <strong>NETWORK</strong> will tell the browser that all other files must be downloaded from the internet fresh each time they are needed.</p>
+
+<h2>Success!</h2>
+
+<p>We've created quick and simple todo app that works when the device is offline that, by using both IndexedDB and WebSQL (via a polyfill), is capable of working across all major modern browsers.</p>
 
 <hr />
 
