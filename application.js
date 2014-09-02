@@ -4,8 +4,8 @@
   var db, input, ul;
  
   databaseOpen(function() {
-    input = document.getElementsByTagName('input')[0];
-    ul = document.getElementsByTagName('ul')[0];
+    input = document.querySelector('input');
+    ul = document.querySelector('ul');
     document.body.addEventListener('submit', onSubmit);
     document.body.addEventListener('click', onClick);
     databaseTodosGet(renderAllTodos);
