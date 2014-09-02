@@ -1,4 +1,6 @@
 CACHE MANIFEST
+# v2
+
 ./styles.css
 ./indexeddb.shim.min.js
 ./application.js
