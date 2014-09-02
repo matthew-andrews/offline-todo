@@ -77,48 +77,44 @@
       timeStamp: Date.now()
     });
  
-    request.onsuccess = function(e) {
+    transaction.oncomplete = function(e) {
       callback();
     };
     request.onerror = databaseError;
   }
 
   function databaseTodosGet(callback) {
-    
-    // Emergency hack - Chrome seems to not update its IndexedDB data quick enough anymore!
-    setTimeout(function() {
-      var transaction = db.transaction(['todo'], 'readonly');
-      var store = transaction.objectStore('todo');
-   
-      // Get everything in the store
-      var keyRange = IDBKeyRange.lowerBound(0);
-      var cursorRequest = store.openCursor(keyRange);
-   
-      // This fires once per row in the store, so for simplicity
-      // collect the data in an array (data) and send it pass it
-      // in the callback in one go
-      var data = [];
-      cursorRequest.onsuccess = function(e) {
-        var result = e.target.result;
-   
-        // If there's data, add it to array
-        if (result) {
-          data.push(result.value); 
-          result.continue();
-   
-        // Reach the end of the data
-        } else {
-          callback(data);
-        }
-      };
-    }, 200);
+    var transaction = db.transaction(['todo'], 'readonly');
+    var store = transaction.objectStore('todo');
+ 
+    // Get everything in the store
+    var keyRange = IDBKeyRange.lowerBound(0);
+    var cursorRequest = store.openCursor(keyRange);
+ 
+    // This fires once per row in the store, so for simplicity
+    // collect the data in an array (data) and send it pass it
+    // in the callback in one go
+    var data = [];
+    cursorRequest.onsuccess = function(e) {
+      var result = e.target.result;
+ 
+      // If there's data, add it to array
+      if (result) {
+        data.push(result.value); 
+        result.continue();
+ 
+      // Reach the end of the data
+      } else {
+        callback(data);
+      }
+    };
   }
 
   function databaseTodosDelete(id, callback) {
     var transaction = db.transaction(['todo'], 'readwrite');
     var store = transaction.objectStore('todo');
     var request = store.delete(id);
-    request.onsuccess = function(e) {
+    transaction.oncomplete = function(e) {
       callback();
     };
     request.onerror = databaseError;
